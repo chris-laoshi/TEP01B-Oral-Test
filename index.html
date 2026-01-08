@@ -1,0 +1,120 @@
+import React, { useMemo, useState } from "react";
+
+type Question = {
+  id: number;
+  text: string;
+  imageUrl?: string;
+};
+
+export default function OralTest10Q() {
+  const questions: Question[] = useMemo(
+    () => [
+      { id: 1, text: "Are you hot?" },
+      { id: 2, text: "Are you cold?" },
+      {
+        id: 3,
+        text: "Is he young?",
+        imageUrl: "https://i.postimg.cc/tT8cMH8H/old-man.png",
+      },
+      {
+        id: 4,
+        text: "Is it slow?",
+        imageUrl: "https://i.postimg.cc/gJ17TP1J/turtle.png",
+      },
+      { id: 5, text: "Are you a teacher?" },
+      { id: 6, text: "Is (student name) a student?" },
+      {
+        id: 7,
+        text: "Is it a robot?",
+        imageUrl: "https://i.postimg.cc/d1gfxKgF/cat.png",
+      },
+      {
+        id: 8,
+        text: "Where is the pineapple?",
+        imageUrl: "https://i.postimg.cc/TwBs4XBR/pineapple-on-table.png",
+      },
+      {
+        id: 9,
+        text: "Is the apple under the chair?",
+        imageUrl: "https://i.postimg.cc/Px07Rk0d/apple-by-table.png",
+      },
+      { id: 10, text: "Ask me a question." },
+    ],
+    []
+  );
+
+  const [idx, setIdx] = useState(0);
+  const q = questions[idx];
+
+  const canBack = idx > 0;
+  const canNext = idx < questions.length - 1;
+
+  const goBack = () => setIdx((v) => Math.max(0, v - 1));
+  const goNext = () => setIdx((v) => Math.min(questions.length - 1, v + 1));
+  const reset = () => setIdx(0);
+
+  return (
+    <div style={{ fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif", padding: 16, maxWidth: 720, margin: "0 auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
+        <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>Oral Test</h2>
+        <div style={{ fontSize: 14 }}>
+          Question {q.id} / {questions.length}
+        </div>
+      </div>
+
+      <div
+        style={{
+          border: "1px solid #ddd",
+          borderRadius: 10,
+          padding: 16,
+          minHeight: 260,
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+          justifyContent: "center",
+        }}
+      >
+        {q.imageUrl ? (
+          <img
+            src={q.imageUrl}
+            alt={`Question ${q.id} image`}
+            style={{
+              width: "100%",
+              maxWidth: 560,
+              maxHeight: 360,
+              objectFit: "contain",
+              borderRadius: 10,
+              alignSelf: "center",
+            }}
+          />
+        ) : null}
+
+        <div style={{ fontSize: 28, lineHeight: 1.25, textAlign: "center" }}>{q.text}</div>
+      </div>
+
+      <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+        <button onClick={goBack} disabled={!canBack} style={btnStyle(!canBack)}>
+          Back
+        </button>
+        <button onClick={reset} style={btnStyle(false)}>
+          Reset
+        </button>
+        <div style={{ flex: 1 }} />
+        <button onClick={goNext} disabled={!canNext} style={btnStyle(!canNext)}>
+          Next
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function btnStyle(disabled: boolean): React.CSSProperties {
+  return {
+    padding: "10px 14px",
+    borderRadius: 10,
+    border: "1px solid #ccc",
+    background: disabled ? "#f3f3f3" : "#fff",
+    cursor: disabled ? "not-allowed" : "pointer",
+    fontSize: 14,
+  };
+}
