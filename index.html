@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oral Test</title>
 
-  <!-- Sriracha font -->
+  <!-- Delius font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sriracha&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Delius&display=swap" rel="stylesheet">
 
-  <!-- Preload images (network hint) -->
+  <!-- Preload images -->
   <link rel="preload" as="image" href="https://i.postimg.cc/tT8cMH8H/old-man.png">
   <link rel="preload" as="image" href="https://i.postimg.cc/gJ17TP1J/turtle.png">
   <link rel="preload" as="image" href="https://i.postimg.cc/d1gfxKgF/cat.png">
@@ -18,25 +18,24 @@
   <link rel="preload" as="image" href="https://i.postimg.cc/Px07Rk0d/apple-by-table.png">
 
   <style>
-    :root{
+    :root {
       --maxw: 900px;
       --radius: 18px;
       --border: #dcdcdc;
       --muted: #666;
-      --shadow: 0 1px 0 rgba(0,0,0,0.03);
     }
 
     * { box-sizing: border-box; }
 
-    body{
-      font-family: "Sriracha", system-ui, sans-serif;
-      background: #fff;
+    body {
+      font-family: "Delius", system-ui, sans-serif;
+      background: #ffffff;
       margin: 0;
       padding: 16px;
       color: #111;
     }
 
-    .container{
+    .container {
       max-width: var(--maxw);
       margin: 0 auto;
       display: flex;
@@ -44,7 +43,7 @@
       gap: 12px;
     }
 
-    .topbar{
+    .topbar {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
@@ -52,32 +51,30 @@
       gap: 8px;
     }
 
-    h1{
+    h1 {
       margin: 0;
       font-size: 22px;
       font-weight: 400;
     }
 
-    .counter{
+    .counter {
       font-size: 14px;
       color: var(--muted);
-      letter-spacing: 0.2px;
     }
 
-    .card{
+    .card {
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 18px;
+      padding: 20px;
       min-height: 60vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 18px;
       text-align: center;
-      box-shadow: var(--shadow);
     }
 
-    #image{
+    #image {
       width: 100%;
       max-height: 45vh;
       object-fit: contain;
@@ -85,66 +82,50 @@
       display: none;
     }
 
-    /* We KEEP contextual alternates ON so you can see the “good y” forms */
-    .question{
+    .question {
       font-size: clamp(28px, 6vw, 44px);
       line-height: 1.25;
       font-weight: 400;
-      font-feature-settings: "calt" 1, "liga" 1;
-      font-variant-ligatures: contextual;
     }
 
-    .status{
+    .status {
       min-height: 22px;
       font-size: 14px;
       color: var(--muted);
     }
 
-    .controls{
+    .controls {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 12px;
     }
 
-    button{
+    button {
       padding: 18px 14px;
       border-radius: 18px;
       border: 1px solid #ccc;
       background: #fff;
-      font-family: "Sriracha", system-ui, sans-serif;
+      font-family: "Delius", system-ui, sans-serif;
       font-size: 20px;
       font-weight: 400;
       cursor: pointer;
       touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
     }
 
-    button:disabled{
+    button:disabled {
       background: #f3f3f3;
       color: #888;
       cursor: not-allowed;
     }
 
-    button:active{
+    button:active {
       transform: scale(0.97);
     }
 
-    .footerHints{
-      font-size: 12px;
-      color: var(--muted);
-      text-align: center;
-      margin-top: 2px;
-    }
-
-    @media (min-width: 900px){
-      body{ padding: 24px; }
-      .card{ padding: 24px; }
-      button{ padding: 20px; }
-    }
-
-    /* Extra comfort on very small screens */
-    @media (max-width: 360px){
-      button{ font-size: 18px; padding: 16px 12px; }
+    @media (min-width: 900px) {
+      body { padding: 24px; }
+      .card { padding: 26px; }
+      button { padding: 20px; }
     }
   </style>
 </head>
@@ -167,8 +148,6 @@
       <button id="reset">Reset</button>
       <button id="next">Next</button>
     </div>
-
-    <div class="footerHints">Keyboard: ← Back · → Next · Home Reset</div>
   </div>
 
   <script>
@@ -177,7 +156,7 @@
       turtle: "https://i.postimg.cc/gJ17TP1J/turtle.png",
       cat: "https://i.postimg.cc/d1gfxKgF/cat.png",
       pineapple: "https://i.postimg.cc/TwBs4XBR/pineapple-on-table.png",
-      appleByTable: "https://i.postimg.cc/Px07Rk0d/apple-by-table.png",
+      appleByTable: "https://i.postimg.cc/Px07Rk0d/apple-by-table.png"
     };
 
     const questions = [
@@ -190,14 +169,12 @@
       { text: "Is it a robot?", image: IMAGE_URLS.cat },
       { text: "Where is the pineapple?", image: IMAGE_URLS.pineapple },
       { text: "Is the apple under the chair?", image: IMAGE_URLS.appleByTable },
-      { text: "Ask me a question." },
+      { text: "Ask me a question." }
     ];
 
     // JS preload (extra safety)
     Object.values(IMAGE_URLS).forEach(url => {
       const img = new Image();
-      img.decoding = "async";
-      img.loading = "eager";
       img.src = url;
     });
 
@@ -231,23 +208,15 @@
     }
 
     imageEl.addEventListener("error", () => {
-      statusEl.textContent = "Image failed to load. Check the URL or internet connection.";
+      statusEl.textContent = "Image failed to load.";
       imageEl.style.display = "none";
     });
 
-    backBtn.onclick = () => {
-      if (idx > 0) { idx--; render(); }
-    };
+    backBtn.onclick = () => { if (idx > 0) { idx--; render(); } };
+    nextBtn.onclick = () => { if (idx < questions.length - 1) { idx++; render(); } };
+    resetBtn.onclick = () => { idx = 0; render(); };
 
-    nextBtn.onclick = () => {
-      if (idx < questions.length - 1) { idx++; render(); }
-    };
-
-    resetBtn.onclick = () => {
-      idx = 0; render();
-    };
-
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", e => {
       if (e.key === "ArrowLeft") backBtn.click();
       if (e.key === "ArrowRight") nextBtn.click();
       if (e.key === "Home") resetBtn.click();
