@@ -2,98 +2,180 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oral Test</title>
+
+  <!-- Force preload of the 5 images -->
+  <link rel="preload" as="image" href="https://i.postimg.cc/tT8cMH8H/old-man.png">
+  <link rel="preload" as="image" href="https://i.postimg.cc/gJ17TP1J/turtle.png">
+  <link rel="preload" as="image" href="https://i.postimg.cc/d1gfxKgF/cat.png">
+  <link rel="preload" as="image" href="https://i.postimg.cc/TwBs4XBR/pineapple-on-table.png">
+  <link rel="preload" as="image" href="https://i.postimg.cc/Px07Rk0d/apple-by-table.png">
+
   <style>
+    :root {
+      --maxw: 860px;
+      --radius: 14px;
+      --border: #dcdcdc;
+      --bg: #ffffff;
+      --muted: #666;
+      --btn-bg: #ffffff;
+      --btn-border: #cfcfcf;
+      --btn-disabled: #f2f2f2;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: #fff;
+      background: var(--bg);
       margin: 0;
-      padding: 20px;
+      padding: 16px;
+      color: #111;
     }
+
     .container {
-      max-width: 720px;
+      max-width: var(--maxw);
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     h1 {
-      margin-bottom: 6px;
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
     }
+
     .counter {
       font-size: 14px;
-      margin-bottom: 12px;
+      color: var(--muted);
     }
+
     .card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 20px;
-      min-height: 260px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      min-height: 60vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 16px;
+      gap: 14px;
       text-align: center;
     }
-    img {
-      max-width: 560px;
-      max-height: 360px;
-      margin: 0 auto;
+
+    #image {
+      width: 100%;
+      max-height: 45vh;
       object-fit: contain;
-      border-radius: 10px;
+      border-radius: var(--radius);
+      display: none;
     }
+
     .question {
-      font-size: 28px;
-      line-height: 1.3;
+      font-size: clamp(26px, 5vw, 40px);
+      line-height: 1.2;
+      font-weight: 650;
+      padding: 6px 4px;
     }
+
+    .status {
+      min-height: 20px;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+    }
+
     .controls {
-      margin-top: 16px;
-      display: flex;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
     }
+
     button {
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      background: #fff;
-      font-size: 14px;
+      padding: 16px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      font-size: 18px;
+      font-weight: 650;
       cursor: pointer;
+      touch-action: manipulation;
     }
+
+    button:active {
+      transform: scale(0.99);
+    }
+
     button:disabled {
-      background: #f3f3f3;
+      background: var(--btn-disabled);
       cursor: not-allowed;
+      color: #888;
     }
-    .spacer {
-      flex: 1;
+
+    /* Make the center button slightly narrower label-friendly on small screens */
+    #reset {
+      font-weight: 700;
+    }
+
+    /* Slightly more breathing room on larger screens */
+    @media (min-width: 900px) {
+      body { padding: 24px; }
+      .card { padding: 22px; }
+      button { padding: 16px 18px; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Oral Test</h1>
-    <div class="counter" id="counter"></div>
+    <div class="topbar">
+      <h1>Oral Test</h1>
+      <div class="counter" id="counter"></div>
+    </div>
 
     <div class="card">
-      <img id="image" style="display:none;" />
+      <img id="image" alt="Question image" />
       <div class="question" id="question"></div>
+      <div class="status" id="status"></div>
     </div>
 
     <div class="controls">
       <button id="back">Back</button>
       <button id="reset">Reset</button>
-      <div class="spacer"></div>
       <button id="next">Next</button>
     </div>
   </div>
 
   <script>
+    const IMAGE_URLS = [
+      "https://i.postimg.cc/tT8cMH8H/old-man.png",
+      "https://i.postimg.cc/gJ17TP1J/turtle.png",
+      "https://i.postimg.cc/d1gfxKgF/cat.png",
+      "https://i.postimg.cc/TwBs4XBR/pineapple-on-table.png",
+      "https://i.postimg.cc/Px07Rk0d/apple-by-table.png"
+    ];
+
     const questions = [
       { text: "Are you hot?" },
       { text: "Are you cold?" },
-      { text: "Is he young?", image: "https://i.postimg.cc/tT8cMH8H/old-man.png" },
-      { text: "Is it slow?", image: "https://i.postimg.cc/gJ17TP1J/turtle.png" },
+      { text: "Is he young?", image: IMAGE_URLS[0] },
+      { text: "Is it slow?", image: IMAGE_URLS[1] },
       { text: "Are you a teacher?" },
       { text: "Is (student name) a student?" },
-      { text: "Is it a robot?", image: "https://i.postimg.cc/d1gfxKgF/cat.png" },
-      { text: "Where is the pineapple?", image: "https://i.postimg.cc/TwBs4XBR/pineapple-on-table.png" },
-      { text: "Is the apple under the chair?", image: "https://i.postimg.cc/Px07Rk0d/apple-by-table.png" },
+      { text: "Is it a robot?", image: IMAGE_URLS[2] },
+      { text: "Where is the pineapple?", image: IMAGE_URLS[3] },
+      { text: "Is the apple under the chair?", image: IMAGE_URLS[4] },
       { text: "Ask me a question." }
     ];
 
@@ -102,40 +184,62 @@
     const counterEl = document.getElementById("counter");
     const questionEl = document.getElementById("question");
     const imageEl = document.getElementById("image");
+    const statusEl = document.getElementById("status");
+
     const backBtn = document.getElementById("back");
     const nextBtn = document.getElementById("next");
     const resetBtn = document.getElementById("reset");
+
+    // Force-preload via JS too (in addition to <link rel="preload">)
+    const preloadImages = (urls) => {
+      urls.forEach((url) => {
+        const img = new Image();
+        img.decoding = "async";
+        img.loading = "eager";
+        img.src = url;
+      });
+    };
+    preloadImages(IMAGE_URLS);
 
     function render() {
       const q = questions[idx];
       counterEl.textContent = `Question ${idx + 1} / ${questions.length}`;
       questionEl.textContent = q.text;
+      statusEl.textContent = "";
 
       if (q.image) {
-        imageEl.src = q.image;
         imageEl.style.display = "block";
+        imageEl.src = q.image;
       } else {
         imageEl.style.display = "none";
+        imageEl.removeAttribute("src");
       }
 
       backBtn.disabled = idx === 0;
       nextBtn.disabled = idx === questions.length - 1;
     }
 
-    backBtn.onclick = () => {
-      if (idx > 0) idx--;
-      render();
-    };
+    // Helpful status if an image fails
+    imageEl.addEventListener("error", () => {
+      statusEl.textContent = "Image failed to load. Check the URL or internet connection.";
+      imageEl.style.display = "none";
+    });
 
-    nextBtn.onclick = () => {
-      if (idx < questions.length - 1) idx++;
-      render();
-    };
+    imageEl.addEventListener("load", () => {
+      statusEl.textContent = "";
+      if (questions[idx].image) imageEl.style.display = "block";
+    });
 
-    resetBtn.onclick = () => {
-      idx = 0;
-      render();
-    };
+    backBtn.onclick = () => { if (idx > 0) { idx--; render(); } };
+    nextBtn.onclick = () => { if (idx < questions.length - 1) { idx++; render(); } };
+    resetBtn.onclick = () => { idx = 0; render(); };
+
+    // Optional keyboard shortcuts (nice on laptops)
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") backBtn.click();
+      if (e.key === "ArrowRight") nextBtn.click();
+      if (e.key === "Home") resetBtn.click();
+    });
 
     render();
   </script>
