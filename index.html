@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oral Test</title>
 
-  <!-- Patrick Hand font -->
+  <!-- Sriracha font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sriracha&display=swap" rel="stylesheet">
 
   <!-- Force preload of the 5 images -->
   <link rel="preload" as="image" href="https://i.postimg.cc/tT8cMH8H/old-man.png">
@@ -20,7 +20,7 @@
   <style>
     :root {
       --maxw: 860px;
-      --radius: 16px;
+      --radius: 18px;
       --border: #dcdcdc;
       --muted: #666;
     }
@@ -28,7 +28,7 @@
     * { box-sizing: border-box; }
 
     body {
-      font-family: "Patrick Hand", system-ui, sans-serif;
+      font-family: "Sriracha", system-ui, sans-serif;
       background: #fff;
       margin: 0;
       padding: 16px;
@@ -54,7 +54,7 @@
     h1 {
       margin: 0;
       font-size: 22px;
-      font-weight: 700;
+      font-weight: 400;
     }
 
     .counter {
@@ -65,12 +65,12 @@
     .card {
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 18px;
       min-height: 60vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 16px;
+      gap: 18px;
       text-align: center;
     }
 
@@ -83,7 +83,7 @@
     }
 
     .question {
-      font-size: clamp(28px, 5.5vw, 42px);
+      font-size: clamp(28px, 5.8vw, 42px);
       line-height: 1.25;
       font-weight: 400;
     }
@@ -101,11 +101,11 @@
     }
 
     button {
-      padding: 16px 14px;
-      border-radius: 16px;
+      padding: 18px 14px;
+      border-radius: 18px;
       border: 1px solid #ccc;
       background: #fff;
-      font-family: "Patrick Hand", system-ui, sans-serif;
+      font-family: "Sriracha", system-ui, sans-serif;
       font-size: 20px;
       font-weight: 400;
       cursor: pointer;
@@ -119,13 +119,13 @@
     }
 
     button:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     @media (min-width: 900px) {
       body { padding: 24px; }
-      .card { padding: 22px; }
-      button { padding: 18px; }
+      .card { padding: 24px; }
+      button { padding: 20px; }
     }
   </style>
 </head>
@@ -183,7 +183,7 @@
     const nextBtn = document.getElementById("next");
     const resetBtn = document.getElementById("reset");
 
-    // JS preload (extra safety)
+    // Extra JS preload
     IMAGE_URLS.forEach(url => {
       const img = new Image();
       img.src = url;
@@ -216,7 +216,7 @@
     nextBtn.onclick = () => { if (idx < questions.length - 1) { idx++; render(); } };
     resetBtn.onclick = () => { idx = 0; render(); };
 
-    // Keyboard shortcuts
+    // Keyboard navigation
     document.addEventListener("keydown", e => {
       if (e.key === "ArrowLeft") backBtn.click();
       if (e.key === "ArrowRight") nextBtn.click();
